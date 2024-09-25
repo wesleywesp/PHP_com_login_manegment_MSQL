@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ab2a78b3f0.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script type="text/javascript" src="orcament.js" defer></script>
+    <script type="text/javascript" src="javascript/map.js" defer></script>
+    <script type="text/javascript" src="javascript/rss.js" defer></script>
+    <!--leitura de noticias-->
+    <title>Orçamento</title>
+</head>
+
+<body onload="initMap()" style="background-color: rgba(34, 97, 47, 0.425);">
+    <!--menu-->
+
+    <body>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
+                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions"
+                    aria-controls="offcanvasWithBothOptions" onclick="noticiasRss()">
+                    <i class="fa-solid fa-square-rss fa-2xl" style="color: #FFD43B;"></i></button>
+                <button class="navbar-toggler navbar-nav" style="border: none;"><a href="./index.html#home"
+                        class="nav-link" style="border: none;"><i class="fa-solid fa-code"></i></a></button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./index.php#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./index.php#galeria">Galeria</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#map_1">contactos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#orcamento">Orçamento</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="nav-link "href="./php_sql/login_index.php">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!--menu lateral-->
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions"
+            aria-labelledby="offcanvasWithBothOptionsLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Noticias RSS <i
+                        class="fa-solid fa-square-rss fa-lg" style="color: #FFD43B;"></i></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="notic"></div>
+            </div>
+        </div>
+
+        <!--contactos/map-->
+        <div class="container" id="map_1" style="padding-top: 10%; padding-bottom: 5%;">
+            <div class="row">
+                <div class="col-9" style="text-align: center;">
+                    <h3>contactos:</h3>
+                    <p><i class="fa-solid fa-location-dot" id="office"></i>Rua de Camoões, Porto, Portugal</a></p>
+
+                    <p><i class="fa-solid fa-phone"></i> Phone:+351 909090907070</p>
+                    <p><i class="fa-solid fa-envelope"></i><a href="mailto:Weasp@webdev.com">Email:Weasp@webdev.com</a>
+                    </p>
+                    
+                </div>
+                <div class="col-4"  style="padding-bottom: 80px;">
+                    <input type="text" class="form_control" id="inicio">
+                    
+                    <button class="btn btn-primary" onclick="calcRoute()"><i class="fa-solid fa-location-arrow"></i>Calcular Rota</button><br><hr>
+                    <button class="btn btn-primary" onclick="locanow()"><i class="fa-solid fa-location-dot"></i> Usar Localização Atual</button>
+                    <br><strong>Mode of Travel: </strong>
+                    <select class="form-select form-select-sm" id="mode">
+                      <option value="DRIVING">Carro</option>
+                      <option value="WALKING">Andando</option>
+                      <option value="BICYCLING">Bicicleta</option>
+                      <option value="TRANSIT">Tranporte</option>
+                    </select>
+                </div>
+                <div class="col-6" id="map" style="height: 500px; width: 500px;"></div>
+            </div>
+        </div>
+
+    <!-- Formulário de orçamento -->
+    <section id="orcamento" class="container mt-5 pt-5 bg-light rounded shadow">
+        <h2 class="text-center mb-4">Pedido de Orçamento</h2>
+        <h4 id="msg" class="text-center"></h4>
+        <form id="budgetForm" class="row g-3 needs-validation">
+
+            <!-- Dados Pessoais -->
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Seu nome" required>
+                <div class="invalid-feedback">Por favor, insira seu nome.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="apelido" class="form-label">Apelido</label>
+                <input type="text" class="form-control" id="apelido" name="apelido" placeholder="Seu apelido" required>
+                <div class="invalid-feedback">Por favor, insira seu apelido.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="telefone" class="form-label">Telefone</label>
+                <div class="input-group">
+                    <span class="input-group-text">+351</span>
+                    <input type="text" class="form-control" id="telefone" name="telefone" maxlength="9" required>
+                    <div class="invalid-feedback">Insira um número de telefone válido.</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Seu email" required>
+                <div class="invalid-feedback">Por favor, insira um email válido.</div>
+            </div>
+
+            <div class="col-12">
+                <label for="motivo" class="form-label">Motivo do Contacto</label>
+                <textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>
+                <div class="invalid-feedback">Descreva o motivo do contacto.</div>
+            </div>
+
+            <!-- Pedido de orçamento -->
+            <div class="col-md-6">
+                <label for="tipoPagina" class="form-label">Tipo de Página</label>
+                <select class="form-select" id="tipoPagina" name="tipoPagina" required>
+                    <option value="landing_page" data-preco="1000">Landing Page - 1000€</option>
+                    <option value="site_basico" data-preco="2000">Site Básico - 2000€</option>
+                    <option value="site_avancado" data-preco="3000">Site Avançado - 3000€</option>
+                    <option value="ecommerce" data-preco="5000">eCommerce - 5000€</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="prazoMeses" class="form-label">Prazo em Meses</label>
+                <input type="number" class="form-control" id="prazoMeses" name="prazoMeses" value="1" min="1" max="12"
+                    required>
+                <div class="invalid-feedback">Por favor, insira um prazo válido.</div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Separadores Desejados</label>
+                <div class="form-check">
+                    <input class="form-check-input separador" type="checkbox" name="separador[]" value="400" id="home">
+                    <label class="form-check-label" for="home">Home - 400€</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input separador" type="checkbox" name="separador[]" value="400" id="sobre">
+                    <label class="form-check-label" for="sobre">Sobre - 400€</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input separador" type="checkbox" name="separador[]" value="400"
+                        id="servicos">
+                    <label class="form-check-label" for="servicos">Serviços - 400€</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input separador" type="checkbox" name="separador[]" value="400" id="contato">
+                    <label class="form-check-label" for="contato">Contato - 400€</label>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Orçamento Final:</label>
+                <span id="orcamentoFinal" class="form-control-plaintext">0€</span>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary">Enviar Pedido</button>
+            </div>
+        </form>
+    </section>
+                
+            </div>
+        </section>
+        <footer style="padding-top:100px ;">
+            <div class="container-fluid justify-content-end emoji">
+                <a href="https://www.tiktok.com/@weasp_dev" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@weasp_dev" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.facebook.com/weasp_dev/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/weasp_dev/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <p style="font-size: small; color: rgb(9, 8, 8 , 0.5); ;">Powerd by <span
+                        style="text-decoration: underline;">Wesley A. Pinto</span></p>
+
+            </div>
+        </footer>
+        <script async
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyIIuBxR_yc5chUmWOwLDQgWEtAMiJM20&loading=async&libraries=places">
+            </script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    </body>
+
+</html>

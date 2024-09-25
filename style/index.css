@@ -1,0 +1,66 @@
+*{
+    scroll-behavior: smooth;
+}
+@font-face{
+    font-family:cold;
+    src: url(faja.ttf);
+}
+span.cold{
+    font-family: faja;
+}
+.navbar a{
+    text-transform: uppercase;
+    font-family:faja;
+
+}
+p{
+    padding: 2px;
+    font-family:faja;
+}
+h5, h3, h1{ 
+    padding: 2px;
+    font-family:faja;
+    text-transform: capitalize;
+}
+footer{
+
+    color: rgb(9, 8, 8 , 0.5);
+    font-size: 25px;
+    text-decoration: none;
+    text-align: center;
+}
+footer a{
+    color: rgb(9, 8, 8 , 0.5);
+    font-size: 25px;
+    text-decoration: none;
+}
+.conteiner {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px;
+}
+
+.gal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gal img {
+
+    border: 2px solid #21303aa1;
+    border-radius: 2px;
+    box-shadow: 4px 7px 7px 0px #00000042;
+
+    margin: 10px;
+    transition: 400ms;
+}
+
+.gal img:hover {
+
+    transform: scale(1.03);
+}
